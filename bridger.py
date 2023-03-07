@@ -1,24 +1,34 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+#from selenium.webdriver.common.keys import Keys
+#from selenium.webdriver.support.ui import Select
 import time
 
 driver = webdriver.Firefox() # CAN PROBABLY CHANGE THIS TO CHROME
 
 driver.get("https://discord.com/login")
-time.sleep(6)
+time.sleep(1)
 
 file = open("info.txt","r")
 info = file.readlines()
 
-username_input = driver.find_element("name","email")
-username_input.send_keys(info[0])
+#enters info
+driver.find_element("name","email").send_keys(info[0])
+driver.find_element("name","password").send_keys(info[1])
+#clicks login button
+time.sleep(1)
+driver.find_element(By.XPATH,"//button[@type='submit']").click()
 
-password_input = driver.find_element("name","password")
-password_input.send_keys(info[1])
+#wait for captcha
 
-#ogin_button = driver.find_element_by_xpath('//*[@id="app-mount"]/div[2]/div/div[2]/div/div/form/div/div/div[1]/div[3]/button[2]')
-#login_button.click()
+driver.execute_script('''window.open("https://instagram.com/accounts/login","_blank");''')
+time.sleep(1)
+driver.find_element(By.XPATH,"/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/section/main/div/div/div[1]/div[2]/form/div/div[1]/div/label/input").send_keys(info[2])
+driver.find_element(By.XPATH,"/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/section/main/div/div/div[1]/div[2]/form/div/div[2]/div/label/input").send_keys(info[3])
+time.sleep(1)
+driver.find_element(By.XPATH,"//button[@type='submit']").click()
+
+
 time.sleep(1000)
 
 file.close()
